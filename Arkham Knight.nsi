@@ -7,6 +7,7 @@
 
   !include "MUI2.nsh"
   !include "nsdialogs.nsh"
+  !include "${__FILEDIR__}\MUI_README.nsh"
 
 ;--------------------------------
 ;General
@@ -33,7 +34,7 @@
 ;--------------------------------
 ;Pages
 
-  !insertmacro MUI_PAGE_LICENSE "${NSISDIR}\Docs\Modern UI\License.txt"
+  !insertmacro MUI_PAGE_README "Readme.txt"
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
