@@ -60,7 +60,7 @@ Section "Batman AK Turkce Yama" SecBatmanAK
   WriteRegStr HKCU "Software\Batman Arkham Knight Turkce Yama" "" $INSTDIR
 
   ;Create uninstaller
-  WriteUninstaller "$INSTDIR\Uninstall.exe"
+  WriteUninstaller "$INSTDIR\Batman Arkham Knight Turkce Yama Kaldir.exe"
 
 SectionEnd
 
@@ -83,7 +83,9 @@ SectionEnd
 Section
   nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\backup.cmd"
   nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\move.cmd"
+  SetOutPath "$INSTDIR\BmGame\CookedPCConsole\Temporary"
   nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\Temporary\decomp.cmd"
+  SetOutPath "$INSTDIR\BmGame\CookedPCConsole"
   nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\afterDecomp.cmd"
 
   ;Delete Command Files
@@ -93,6 +95,9 @@ Section
   Delete "$INSTDIR\BmGame\CookedPCConsole\move.cmd"
   Delete "$INSTDIR\BmGame\CookedPCConsole\del.cmd"
   Delete "$INSTDIR\BmGame\CookedPCConsole\restoreBackups.cmd"
+
+  SetOutPath "$INSTDIR"
+
 SectionEnd
 ;--------------------------------
 
@@ -100,13 +105,13 @@ SectionEnd
 ;Uninstaller Section
 Section "Uninstall"
 
-  ;ADD YOUR OWN FILES HERE...
+  SetOutPath "$INSTDIR\BmGame\CookedPCConsole"
 
-  File /r "InstallFiles\*"
+  File /r "UnistallFiles\*"
 
   nsExec::Exec /OEM "$INSTDIR\BmGame\CookedPCConsole\restoreBackups.cmd"
 
-  Delete "$INSTDIR\Uninstall.exe"
+  Delete "$INSTDIR\Batman Arkham Knight Turkce Yama Kaldir.exe"
   
   RMDir "$INSTDIR\BmGame\CookedPCConsole\Temporary"
 
