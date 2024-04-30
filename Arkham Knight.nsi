@@ -15,6 +15,8 @@
   ;Name and file
   Name "Batman Arkham City Turkce Yama"
   OutFile "Batman Arkham City Turkce Yama.exe"
+  !define MUI_ICON "icon.ico"
+  !define MUI_UNICON "icon.ico"
   Unicode True
 
   ;Default installation folder
