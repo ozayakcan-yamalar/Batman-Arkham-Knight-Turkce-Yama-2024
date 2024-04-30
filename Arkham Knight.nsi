@@ -52,9 +52,13 @@
 
 Section "Batman AK Turkce Yama" SecBatmanAK
 
+  SetOutPath "$INSTDIR\BmGame\Movies"
+
+  File /r "InstallFiles\Movies\*"
+  
   SetOutPath "$INSTDIR\BmGame\CookedPCConsole"
   
-  File /r "InstallFiles\*"
+  File /r "InstallFiles\CookedPCConsole\*"
 
   ;Store installation folder
   WriteRegStr HKCU "Software\Batman Arkham Knight Turkce Yama" "" $INSTDIR
@@ -81,6 +85,23 @@ SectionEnd
 ;Run Post Install Commands
 
 Section
+  
+  ;Install Movies
+  SetOutPath "$INSTDIR\BmGame\Movies"
+  nsExec::ExecToLog "$INSTDIR\BmGame\Movies\backup.cmd"
+  nsExec::ExecToLog "$INSTDIR\BmGame\Movies\usm.cmd"
+  Delete "$INSTDIR\BmGame\Movies\restoreMoviesBackups.cmd"
+  Delete "$INSTDIR\BmGame\Movies\backup.cmd"
+  Delete "$INSTDIR\BmGame\Movies\Gibbed.IO.dll"
+  Delete "$INSTDIR\BmGame\Movies\us.exe"
+  Delete "$INSTDIR\BmGame\Movies\usm.cmd"
+  Delete "$INSTDIR\BmGame\Movies\ch10_press_gathers.txt"
+  Delete "$INSTDIR\BmGame\Movies\ending.txt"
+  Delete "$INSTDIR\BmGame\Movies\intro.txt"
+  Delete "$INSTDIR\BmGame\Movies\intro_part_2.txt"
+
+  ;Install CookedPCConsole
+  SetOutPath "$INSTDIR\BmGame\CookedPCConsole"
   nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\backup.cmd"
   nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\move.cmd"
   SetOutPath "$INSTDIR\BmGame\CookedPCConsole\Temporary"
@@ -94,7 +115,7 @@ Section
   Delete "$INSTDIR\BmGame\CookedPCConsole\backup.cmd"
   Delete "$INSTDIR\BmGame\CookedPCConsole\move.cmd"
   Delete "$INSTDIR\BmGame\CookedPCConsole\del.cmd"
-  Delete "$INSTDIR\BmGame\CookedPCConsole\restoreBackups.cmd"
+  Delete "$INSTDIR\BmGame\CookedPCConsole\restoreUpkBackups.cmd"
 
   SetOutPath "$INSTDIR"
 
@@ -105,11 +126,18 @@ SectionEnd
 ;Uninstaller Section
 Section "Uninstall"
 
+
+  SetOutPath "$INSTDIR\BmGame\Movies"
+
+  File /r "UnistallFiles\restoreMoviesBackups.cmd"
+
+  nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\restoreMoviesBackups.cmd"
+
   SetOutPath "$INSTDIR\BmGame\CookedPCConsole"
 
-  File /r "UnistallFiles\*"
+  File /r "UnistallFiles\restoreUpkBackups.cmd"
 
-  nsExec::Exec /OEM "$INSTDIR\BmGame\CookedPCConsole\restoreBackups.cmd"
+  nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\restoreUpkBackups.cmd"
 
   Delete "$INSTDIR\Batman Arkham Knight Turkce Yama Kaldir.exe"
   
@@ -119,7 +147,16 @@ Section "Uninstall"
   Delete "$INSTDIR\BmGame\CookedPCConsole\backup.cmd"
   Delete "$INSTDIR\BmGame\CookedPCConsole\move.cmd"
   Delete "$INSTDIR\BmGame\CookedPCConsole\del.cmd"
-  Delete "$INSTDIR\BmGame\CookedPCConsole\restoreBackups.cmd"
+  Delete "$INSTDIR\BmGame\CookedPCConsole\restoreUpkBackups.cmd"
+  Delete "$INSTDIR\BmGame\Movies\restoreMoviesBackups.cmd"
+  Delete "$INSTDIR\BmGame\Movies\backup.cmd"
+  Delete "$INSTDIR\BmGame\Movies\Gibbed.IO.dll"
+  Delete "$INSTDIR\BmGame\Movies\us.exe"
+  Delete "$INSTDIR\BmGame\Movies\usm.cmd"
+  Delete "$INSTDIR\BmGame\Movies\ch10_press_gathers.txt"
+  Delete "$INSTDIR\BmGame\Movies\ending.txt"
+  Delete "$INSTDIR\BmGame\Movies\intro.txt"
+  Delete "$INSTDIR\BmGame\Movies\intro_part_2.txt"
 
   DeleteRegKey /ifempty HKCU "Software\Batman Arkham Knight Turkce Yama"
 
