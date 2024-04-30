@@ -1,4 +1,3 @@
-@echo off
 rem Yama Dosyalarını Sil
 del Ace.upk
 del Ace__Ch2.upk
@@ -1710,4 +1709,3 @@ rem Orjinalleri Geri Yükle
 for /R %%f in (*.bak) do (
     ren %%f %%~nf
 )
-pause
