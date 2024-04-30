@@ -66,6 +66,10 @@ Section "Batman AK Turkce Yama" SecBatmanAK
   
   SetOutPath "$INSTDIR\BmGame\CookedPCConsole"
   
+  File /r "InstallFiles\CookedPCConsole\backupFont.cmd"
+
+  nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\backupFont.cmd"
+
   File /r "InstallFiles\CookedPCConsole\*"
 
   ;Store installation folder
@@ -96,7 +100,10 @@ Section
 
   ;Install Localizations
 
-  nsExec::ExecToLog "$INSTDIR\BmGame\Localization\INT\backup.cmd"
+  Delete "$INSTDIR\BmGame\Localization\INT\backup.cmd"
+
+  ;Font
+  Delete "$INSTDIR\BmGame\CookedPCConsole\backupFont.cmd"
 
   ;Install Movies
   SetOutPath "$INSTDIR\BmGame\Movies"
@@ -163,6 +170,7 @@ Section "Uninstall"
 
   Delete "$INSTDIR\BmGame\CookedPCConsole\afterDecomp.cmd"
   Delete "$INSTDIR\BmGame\CookedPCConsole\backup.cmd"
+  Delete "$INSTDIR\BmGame\CookedPCConsole\backupFont.cmd"
   Delete "$INSTDIR\BmGame\CookedPCConsole\move.cmd"
   Delete "$INSTDIR\BmGame\CookedPCConsole\del.cmd"
   Delete "$INSTDIR\BmGame\CookedPCConsole\restoreBackups.cmd"
