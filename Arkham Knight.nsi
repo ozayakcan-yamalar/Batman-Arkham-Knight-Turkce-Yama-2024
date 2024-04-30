@@ -6,6 +6,7 @@
 ;Include Modern UI
 
   !include "MUI2.nsh"
+  !include "nsdialogs.nsh"
 
 ;--------------------------------
 ;General
@@ -53,11 +54,10 @@ Section "Batman AK Turkce Yama" SecBatmanAK
 
   SetOutPath "$INSTDIR\BmGame\CookedPCConsole"
   
+  File /r "InstallFiles\*"
+
   ;Store installation folder
   WriteRegStr HKCU "Software\Batman Arkham Knight Turkce Yama" "" $INSTDIR
-  
-  
-  ExecShellWait print "$INSTDIR\BmGame\CookedPCConsole\copy.cmd"
 
   ;Create uninstaller
   WriteUninstaller "$INSTDIR\Uninstall.exe"
@@ -76,19 +76,45 @@ SectionEnd
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
-;Uninstaller Section
+
+;--------------------------------
+;Run Post Install Commands
 
 Section
-File /r "CookedPCConsole\*"
-SectionEnd
+  nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\backup.cmd"
+  nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\move.cmd"
+  nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\Temporary\decomp.cmd"
+  nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\afterDecomp.cmd"
 
+  ;Delete Command Files
+  nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\del.cmd"
+  Delete "$INSTDIR\BmGame\CookedPCConsole\afterDecomp.cmd"
+  Delete "$INSTDIR\BmGame\CookedPCConsole\backup.cmd"
+  Delete "$INSTDIR\BmGame\CookedPCConsole\move.cmd"
+  Delete "$INSTDIR\BmGame\CookedPCConsole\del.cmd"
+  Delete "$INSTDIR\BmGame\CookedPCConsole\restoreBackups.cmd"
+SectionEnd
+;--------------------------------
+
+
+;Uninstaller Section
 Section "Uninstall"
 
   ;ADD YOUR OWN FILES HERE...
 
-  Delete "$INSTDIR\Uninstall.exe"
+  File /r "InstallFiles\*"
 
-  RMDir "$INSTDIR"
+  nsExec::Exec /OEM "$INSTDIR\BmGame\CookedPCConsole\restoreBackups.cmd"
+
+  Delete "$INSTDIR\Uninstall.exe"
+  
+  RMDir "$INSTDIR\BmGame\CookedPCConsole\Temporary"
+
+  Delete "$INSTDIR\BmGame\CookedPCConsole\afterDecomp.cmd"
+  Delete "$INSTDIR\BmGame\CookedPCConsole\backup.cmd"
+  Delete "$INSTDIR\BmGame\CookedPCConsole\move.cmd"
+  Delete "$INSTDIR\BmGame\CookedPCConsole\del.cmd"
+  Delete "$INSTDIR\BmGame\CookedPCConsole\restoreBackups.cmd"
 
   DeleteRegKey /ifempty HKCU "Software\Batman Arkham Knight Turkce Yama"
 
