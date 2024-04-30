@@ -98,10 +98,12 @@ Section
 
   ;Install Localizations
 
+  SetOutPath "$INSTDIR\BmGame\Localization\INT"
   nsExec::ExecToLog "$INSTDIR\BmGame\Localization\INT\install.cmd"
   Delete "$INSTDIR\BmGame\Localization\INT\install.cmd"
 
   ;Font
+  SetOutPath "$INSTDIR\BmGame\CookedPCConsole"
   Delete "$INSTDIR\BmGame\CookedPCConsole\backupFont.cmd"
 
   ;Install Movies
