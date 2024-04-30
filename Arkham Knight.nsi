@@ -52,6 +52,14 @@
 
 Section "Batman AK Turkce Yama" SecBatmanAK
 
+
+  ;Install Localizations
+  SetOutPath "$INSTDIR\BmGame\Localization\INT"
+  
+  nsExec::ExecToLog "$INSTDIR\BmGame\Localization\INT\backup.cmd"
+
+  File /r "InstallFiles\Localization\*"
+  
   SetOutPath "$INSTDIR\BmGame\Movies"
 
   File /r "InstallFiles\Movies\*"
@@ -85,12 +93,16 @@ SectionEnd
 ;Run Post Install Commands
 
 Section
-  
+
+  ;Install Localizations
+
+  nsExec::ExecToLog "$INSTDIR\BmGame\Localization\INT\backup.cmd"
+
   ;Install Movies
   SetOutPath "$INSTDIR\BmGame\Movies"
   nsExec::ExecToLog "$INSTDIR\BmGame\Movies\backup.cmd"
   nsExec::ExecToLog "$INSTDIR\BmGame\Movies\usm.cmd"
-  Delete "$INSTDIR\BmGame\Movies\restoreMoviesBackups.cmd"
+  Delete "$INSTDIR\BmGame\Movies\restoreBackups.cmd"
   Delete "$INSTDIR\BmGame\Movies\backup.cmd"
   Delete "$INSTDIR\BmGame\Movies\Gibbed.IO.dll"
   Delete "$INSTDIR\BmGame\Movies\us.exe"
@@ -115,7 +127,7 @@ Section
   Delete "$INSTDIR\BmGame\CookedPCConsole\backup.cmd"
   Delete "$INSTDIR\BmGame\CookedPCConsole\move.cmd"
   Delete "$INSTDIR\BmGame\CookedPCConsole\del.cmd"
-  Delete "$INSTDIR\BmGame\CookedPCConsole\restoreUpkBackups.cmd"
+  Delete "$INSTDIR\BmGame\CookedPCConsole\restoreBackups.cmd"
 
   SetOutPath "$INSTDIR"
 
@@ -127,17 +139,23 @@ SectionEnd
 Section "Uninstall"
 
 
+  SetOutPath "$INSTDIR\BmGame\Localization\INT"
+
+  File /r "UnistallFiles\restoreBackups.cmd"
+
+  nsExec::ExecToLog "$INSTDIR\BmGame\Localization\INT\restoreBackups.cmd"
+
   SetOutPath "$INSTDIR\BmGame\Movies"
 
-  File /r "UnistallFiles\restoreMoviesBackups.cmd"
+  File /r "UnistallFiles\restoreBackups.cmd"
 
-  nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\restoreMoviesBackups.cmd"
+  nsExec::ExecToLog "$INSTDIR\BmGame\Movies\restoreBackups.cmd"
 
   SetOutPath "$INSTDIR\BmGame\CookedPCConsole"
 
-  File /r "UnistallFiles\restoreUpkBackups.cmd"
+  File /r "UnistallFiles\restoreBackups.cmd"
 
-  nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\restoreUpkBackups.cmd"
+  nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\restoreBackups.cmd"
 
   Delete "$INSTDIR\Batman Arkham Knight Turkce Yama Kaldir.exe"
   
@@ -147,8 +165,9 @@ Section "Uninstall"
   Delete "$INSTDIR\BmGame\CookedPCConsole\backup.cmd"
   Delete "$INSTDIR\BmGame\CookedPCConsole\move.cmd"
   Delete "$INSTDIR\BmGame\CookedPCConsole\del.cmd"
-  Delete "$INSTDIR\BmGame\CookedPCConsole\restoreUpkBackups.cmd"
-  Delete "$INSTDIR\BmGame\Movies\restoreMoviesBackups.cmd"
+  Delete "$INSTDIR\BmGame\CookedPCConsole\restoreBackups.cmd"
+  Delete "$INSTDIR\BmGame\Movies\restoreBackups.cmd"
+  Delete "$INSTDIR\BmGame\Localization\INT\restoreBackups.cmd"
   Delete "$INSTDIR\BmGame\Movies\backup.cmd"
   Delete "$INSTDIR\BmGame\Movies\Gibbed.IO.dll"
   Delete "$INSTDIR\BmGame\Movies\us.exe"
