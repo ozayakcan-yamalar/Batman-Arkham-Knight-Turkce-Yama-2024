@@ -9,6 +9,7 @@
   !include "nsdialogs.nsh"
   !include "${__FILEDIR__}\MUI_README.nsh"
 
+
 ;--------------------------------
 ;General
 
@@ -17,6 +18,12 @@
   OutFile "Batman Arkham City Turkce Yama.exe"
   !define MUI_ICON "icon.ico"
   !define MUI_UNICON "icon.ico"
+  !define PRODUCT_VERSION "1.0.0.0"
+  VIProductVersion "${PRODUCT_VERSION}"
+  VIFileVersion "${PRODUCT_VERSION}"
+  VIAddVersionKey "FileVersion" "${VERSION}"
+  VIAddVersionKey "LegalCopyright" "(C) Ozay Akcan."
+  VIAddVersionKey "FileDescription" "Batman Arkham Knight son surumu icin turkce yama kurar"
   Unicode True
 
   ;Default installation folder
