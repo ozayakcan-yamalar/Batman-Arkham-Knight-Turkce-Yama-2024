@@ -55,8 +55,6 @@ Section "Batman AK Turkce Yama" SecBatmanAK
 
   ;Install Localizations
   SetOutPath "$INSTDIR\BmGame\Localization\INT"
-  
-  nsExec::ExecToLog "$INSTDIR\BmGame\Localization\INT\backup.cmd"
 
   File /r "InstallFiles\Localization\*"
   
@@ -100,7 +98,8 @@ Section
 
   ;Install Localizations
 
-  Delete "$INSTDIR\BmGame\Localization\INT\backup.cmd"
+  nsExec::ExecToLog "$INSTDIR\BmGame\Localization\INT\install.cmd"
+  Delete "$INSTDIR\BmGame\Localization\INT\install.cmd"
 
   ;Font
   Delete "$INSTDIR\BmGame\CookedPCConsole\backupFont.cmd"
