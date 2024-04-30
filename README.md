@@ -1,6 +1,6 @@
 ## Değişiklikler
 
-- Bu yama önceki bildiğiniz türkçe yama oyunun son halina adapte edilerek güncellenmiştir.
+- Bu yama önceki bildiğiniz türkçe yama oyunun son haline adapte edilerek güncellenmiştir.
 - Bilinen oyun çökmeleri düzeltildi.
 
 ## Kurulum
