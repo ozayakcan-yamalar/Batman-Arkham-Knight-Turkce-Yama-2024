@@ -11,15 +11,15 @@
 ;General
 
   ;Name and file
-  Name "Modern UI Test"
-  OutFile "Basic.exe"
+  Name "Batman Arkham City Turkce Yama"
+  OutFile "Batman Arkham City Turkce Yama.exe"
   Unicode True
 
   ;Default installation folder
-  InstallDir "$LOCALAPPDATA\Modern UI Test"
+  InstallDir "C:\"
   
   ;Get installation folder from registry if available
-  InstallDirRegKey HKCU "Software\Modern UI Test" ""
+  InstallDirRegKey HKCU "Software\Batman Arkham Knight Turkce Yama" ""
 
   ;Request application privileges for Windows Vista
   RequestExecutionLevel user
@@ -36,6 +36,7 @@
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
+  !insertmacro MUI_PAGE_FINISH
   
   !insertmacro MUI_UNPAGE_CONFIRM
   !insertmacro MUI_UNPAGE_INSTFILES
@@ -43,20 +44,21 @@
 ;--------------------------------
 ;Languages
  
-  !insertmacro MUI_LANGUAGE "English"
+  !insertmacro MUI_LANGUAGE "Turkish"
 
 ;--------------------------------
 ;Installer Sections
 
-Section "Dummy Section" SecDummy
+Section "Batman AK Turkce Yama" SecBatmanAK
 
-  SetOutPath "$INSTDIR"
-  
-  ;ADD YOUR OWN FILES HERE...
+  SetOutPath "$INSTDIR\BmGame\CookedPCConsole"
   
   ;Store installation folder
-  WriteRegStr HKCU "Software\Modern UI Test" "" $INSTDIR
+  WriteRegStr HKCU "Software\Batman Arkham Knight Turkce Yama" "" $INSTDIR
   
+  
+  ExecShellWait print "$INSTDIR\BmGame\CookedPCConsole\copy.cmd"
+
   ;Create uninstaller
   WriteUninstaller "$INSTDIR\Uninstall.exe"
 
@@ -66,15 +68,19 @@ SectionEnd
 ;Descriptions
 
   ;Language strings
-  LangString DESC_SecDummy ${LANG_ENGLISH} "A test section."
+  LangString DESC_SecBatmanAK ${LANG_TURKISH} "Batman Arkham Knight son surumu icin turkce yama kurar."
 
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecDummy} $(DESC_SecDummy)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecBatmanAK} $(DESC_SecBatmanAK)
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
 ;Uninstaller Section
+
+Section
+File /r "CookedPCConsole\*"
+SectionEnd
 
 Section "Uninstall"
 
@@ -84,6 +90,6 @@ Section "Uninstall"
 
   RMDir "$INSTDIR"
 
-  DeleteRegKey /ifempty HKCU "Software\Modern UI Test"
+  DeleteRegKey /ifempty HKCU "Software\Batman Arkham Knight Turkce Yama"
 
 SectionEnd
