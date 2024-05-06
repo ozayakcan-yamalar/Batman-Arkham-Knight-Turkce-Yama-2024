@@ -14,15 +14,14 @@
 ;General
 
   ;Name and file
-  !define MUI_PRODUCT "Batman Arkham Knight"
-  !define MUI_PRODUCT_SHORT "Batman AK"
-  !define MUI_PRODUCT_YAMA "${MUI_PRODUCT} Turkce Yama"
-  !define MUI_PRODUCT_YAMA_KALDIR "${MUI_PRODUCT_YAMA} Kaldir"
-  !define MUI_PRODUCT_YAMA_SHORT "${MUI_PRODUCT_SHORT} Turkce Yama"
+  !define OYUN "Batman Arkham Knight"
+  !define MUI_PRODUCT "${OYUN} Turkce Yama"
+  !define MUI_PRODUCT_SHORT "Batman AK Turkce Yama"
+  !define MUI_PRODUCT_KALDIR "${MUI_PRODUCT} Kaldir"
   !define MUI_PRODUCT_DOWNLOAD_URL "https://github.com/ozayakcan/Batman-Arkham-Knight-Turkce-Yama-2024-/releases"
-  !define UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MUI_PRODUCT_YAMA}"
-  Name "${MUI_PRODUCT_YAMA}"
-  OutFile "${MUI_PRODUCT_YAMA}.exe"
+  !define UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MUI_PRODUCT}"
+  Name "${MUI_PRODUCT}"
+  OutFile "${MUI_PRODUCT}.exe"
   !define MUI_ICON "icon.ico"
   !define MUI_UNICON "icon.ico"
   !define PUBLISHER "Ozay Akcan"
@@ -31,14 +30,14 @@
   VIFileVersion "${PRODUCT_VERSION}"
   VIAddVersionKey "FileVersion" "${VERSION}"
   VIAddVersionKey "LegalCopyright" "(C) ${PUBLISHER}."
-  VIAddVersionKey "FileDescription" "${MUI_PRODUCT} son surumu icin turkce yama kurar"
+  VIAddVersionKey "FileDescription" "${MUI_PRODUCT}"
   Unicode True
 
   ;Default installation folder
   InstallDir "C:\"
   
   ;Get installation folder from registry if available
-  InstallDirRegKey HKCU "Software\${MUI_PRODUCT_YAMA}" ""
+  InstallDirRegKey HKCU "Software\${MUI_PRODUCT}" ""
 
   ;Request application privileges for Windows Vista
   RequestExecutionLevel user
@@ -67,10 +66,10 @@
 ;--------------------------------
 ;Installer Sections
 
-Section "${MUI_PRODUCT_YAMA_SHORT}" SecIns
+Section "${MUI_PRODUCT_SHORT}" SecIns
 
   ;Check for uninstaller.
-  IfFileExists "$INSTDIR\${MUI_PRODUCT_YAMA_KALDIR}.exe" ReInsMessage InsTR
+  IfFileExists "$INSTDIR\${MUI_PRODUCT_KALDIR}.exe" ReInsMessage InsTR
   
   ReInsMessage:
 
@@ -135,15 +134,15 @@ Section "${MUI_PRODUCT_YAMA_SHORT}" SecIns
     SetOutPath "$INSTDIR"
 
     ;Register regedit
-    WriteRegStr HKCU "Software\${MUI_PRODUCT_YAMA}" "" $INSTDIR
+    WriteRegStr HKCU "Software\${MUI_PRODUCT}" "" $INSTDIR
 
-    WriteRegStr SHCTX "${UNINST_KEY}" "DisplayIcon" "$INSTDIR\${MUI_PRODUCT_YAMA_KALDIR}.exe, 0"
-    WriteRegStr SHCTX "${UNINST_KEY}" "DisplayName" "${MUI_PRODUCT_YAMA}"
+    WriteRegStr SHCTX "${UNINST_KEY}" "DisplayIcon" "$INSTDIR\${MUI_PRODUCT_KALDIR}.exe,0"
+    WriteRegStr SHCTX "${UNINST_KEY}" "DisplayName" "${MUI_PRODUCT}"
     WriteRegStr SHCTX "${UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
     WriteRegStr SHCTX "${UNINST_KEY}" "UninstallString" \
-      "$\"$INSTDIR\${MUI_PRODUCT_YAMA_KALDIR}.exe$\""
+      "$\"$INSTDIR\${MUI_PRODUCT_KALDIR}.exe$\""
     WriteRegStr SHCTX "${UNINST_KEY}" "QuietUninstallString" \
-      "$\"$INSTDIR\${MUI_PRODUCT_YAMA_KALDIR}.exe$\" /S"
+      "$\"$INSTDIR\${MUI_PRODUCT_KALDIR}.exe$\" /S"
     WriteRegStr SHCTX "${UNINST_KEY}" "Publisher" \
       "${PUBLISHER}"
     WriteRegStr SHCTX "${UNINST_KEY}" "URLInfoAbout" \
@@ -154,7 +153,7 @@ Section "${MUI_PRODUCT_YAMA_SHORT}" SecIns
 
 
     ;Create uninstaller
-    WriteUninstaller "$INSTDIR\${MUI_PRODUCT_YAMA_KALDIR}.exe"
+    WriteUninstaller "$INSTDIR\${MUI_PRODUCT_KALDIR}.exe"
   Done:
 SectionEnd
 
@@ -167,7 +166,7 @@ FunctionEnd
 ;Descriptions
 
   ;Language strings
-  LangString DESC_SecIns ${LANG_TURKISH} "${MUI_PRODUCT} son surumu icin turkce yama kurar."
+  LangString DESC_SecIns ${LANG_TURKISH} "${OYUN} son surumu icin turkce yama kurar."
 
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
@@ -225,11 +224,11 @@ Function ${UN}Unins
   Delete "$INSTDIR\BmGame\Movies\intro.txt"
   Delete "$INSTDIR\BmGame\Movies\intro_part_2.txt"
 
-  DeleteRegKey /ifempty HKCU "Software\${MUI_PRODUCT_YAMA}"
+  DeleteRegKey /ifempty HKCU "Software\${MUI_PRODUCT}"
 
   DeleteRegKey SHCTX "${UNINST_KEY}"
 
-  Delete "$INSTDIR\${MUI_PRODUCT_YAMA_KALDIR}.exe"
+  Delete "$INSTDIR\${MUI_PRODUCT_KALDIR}.exe"
 
 FunctionEnd
 !macroend
