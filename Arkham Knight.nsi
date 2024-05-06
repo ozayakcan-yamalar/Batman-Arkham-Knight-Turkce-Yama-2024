@@ -66,30 +66,77 @@
 
 Section "${MUI_PRODUCT_YAMA_SHORT}" SecIns
 
-
-  ;Install Localizations
-  SetOutPath "$INSTDIR\BmGame\Localization\INT"
-
-  File /r "InstallFiles\Localization\*"
+  ;Check for uninstaller.
+  IfFileExists "$INSTDIR\${MUI_PRODUCT_YAMA_KALDIR}.exe" ReInsMessage InsTR
   
-  SetOutPath "$INSTDIR\BmGame\Movies"
+  ReInsMessage:
 
-  File /r "InstallFiles\Movies\*"
-  
-  SetOutPath "$INSTDIR\BmGame\CookedPCConsole"
-  
-  File /r "InstallFiles\CookedPCConsole\backupFont.cmd"
+    MessageBox MB_YESNO "Yama zaten kurulmus tekrar kurmak ister misiniz?" IDYES true IDNO false
 
-  nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\backupFont.cmd"
+    true:
+      DetailPrint "Yamanin onceki surumu kaldiriliyor."
+      Goto UninsTR
 
-  File /r "InstallFiles\CookedPCConsole\*"
+    false:
+      Goto Done
 
-  ;Store installation folder
-  WriteRegStr HKCU "Software\${MUI_PRODUCT_YAMA}" "" $INSTDIR
+  UninsTR:
+    Call Unins
+    Goto InsTR
 
-  ;Create uninstaller
-  WriteUninstaller "$INSTDIR\${MUI_PRODUCT_YAMA_KALDIR}.exe"
+  InsTR:
 
+    ;Install Localizations
+    SetOutPath "$INSTDIR\BmGame\Localization\INT"
+    File /r "InstallFiles\Localization\*"
+    nsExec::ExecToLog "$INSTDIR\BmGame\Localization\INT\install.cmd"
+    Delete "$INSTDIR\BmGame\Localization\INT\install.cmd"
+
+    ;Install Movies
+    SetOutPath "$INSTDIR\BmGame\Movies"
+    File /r "InstallFiles\Movies\*"
+    nsExec::ExecToLog "$INSTDIR\BmGame\Movies\backup.cmd"
+    nsExec::ExecToLog "$INSTDIR\BmGame\Movies\usm.cmd"
+    Delete "$INSTDIR\BmGame\Movies\restoreBackups.cmd"
+    Delete "$INSTDIR\BmGame\Movies\backup.cmd"
+    Delete "$INSTDIR\BmGame\Movies\Gibbed.IO.dll"
+    Delete "$INSTDIR\BmGame\Movies\us.exe"
+    Delete "$INSTDIR\BmGame\Movies\usm.cmd"
+    Delete "$INSTDIR\BmGame\Movies\ch10_press_gathers.txt"
+    Delete "$INSTDIR\BmGame\Movies\ending.txt"
+    Delete "$INSTDIR\BmGame\Movies\intro.txt"
+    Delete "$INSTDIR\BmGame\Movies\intro_part_2.txt"
+
+    ;Backup Font
+    SetOutPath "$INSTDIR\BmGame\CookedPCConsole"
+    File /r "InstallFiles\CookedPCConsole\backupFont.cmd"
+    nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\backupFont.cmd"
+    Delete "$INSTDIR\BmGame\CookedPCConsole\backupFont.cmd"
+
+    ;Install CookedPC
+    SetOutPath "$INSTDIR\BmGame\CookedPCConsole"
+    File /r "InstallFiles\CookedPCConsole\*"
+    nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\backup.cmd"
+    nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\move.cmd"
+    SetOutPath "$INSTDIR\BmGame\CookedPCConsole\Temporary"
+    nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\Temporary\decomp.cmd"
+    SetOutPath "$INSTDIR\BmGame\CookedPCConsole"
+    nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\afterDecomp.cmd"
+    nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\del.cmd"
+    Delete "$INSTDIR\BmGame\CookedPCConsole\afterDecomp.cmd"
+    Delete "$INSTDIR\BmGame\CookedPCConsole\backup.cmd"
+    Delete "$INSTDIR\BmGame\CookedPCConsole\move.cmd"
+    Delete "$INSTDIR\BmGame\CookedPCConsole\del.cmd"
+    Delete "$INSTDIR\BmGame\CookedPCConsole\restoreBackups.cmd"
+
+    SetOutPath "$INSTDIR"
+
+    ;Store installation folder
+    WriteRegStr HKCU "Software\${MUI_PRODUCT_YAMA}" "" $INSTDIR
+
+    ;Create uninstaller
+    WriteUninstaller "$INSTDIR\${MUI_PRODUCT_YAMA_KALDIR}.exe"
+  Done:
 SectionEnd
 
 
@@ -110,61 +157,17 @@ FunctionEnd
 
 ;--------------------------------
 
-;--------------------------------
-;Run Post Install Commands
-
-Section
-
-  ;Install Localizations
-
-  SetOutPath "$INSTDIR\BmGame\Localization\INT"
-  nsExec::ExecToLog "$INSTDIR\BmGame\Localization\INT\install.cmd"
-  Delete "$INSTDIR\BmGame\Localization\INT\install.cmd"
-
-  ;Font
-  SetOutPath "$INSTDIR\BmGame\CookedPCConsole"
-  Delete "$INSTDIR\BmGame\CookedPCConsole\backupFont.cmd"
-
-  ;Install Movies
-  SetOutPath "$INSTDIR\BmGame\Movies"
-  nsExec::ExecToLog "$INSTDIR\BmGame\Movies\backup.cmd"
-  nsExec::ExecToLog "$INSTDIR\BmGame\Movies\usm.cmd"
-  Delete "$INSTDIR\BmGame\Movies\restoreBackups.cmd"
-  Delete "$INSTDIR\BmGame\Movies\backup.cmd"
-  Delete "$INSTDIR\BmGame\Movies\Gibbed.IO.dll"
-  Delete "$INSTDIR\BmGame\Movies\us.exe"
-  Delete "$INSTDIR\BmGame\Movies\usm.cmd"
-  Delete "$INSTDIR\BmGame\Movies\ch10_press_gathers.txt"
-  Delete "$INSTDIR\BmGame\Movies\ending.txt"
-  Delete "$INSTDIR\BmGame\Movies\intro.txt"
-  Delete "$INSTDIR\BmGame\Movies\intro_part_2.txt"
-
-  ;Install CookedPCConsole
-  SetOutPath "$INSTDIR\BmGame\CookedPCConsole"
-  nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\backup.cmd"
-  nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\move.cmd"
-  SetOutPath "$INSTDIR\BmGame\CookedPCConsole\Temporary"
-  nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\Temporary\decomp.cmd"
-  SetOutPath "$INSTDIR\BmGame\CookedPCConsole"
-  nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\afterDecomp.cmd"
-
-  ;Delete Command Files
-  nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\del.cmd"
-  Delete "$INSTDIR\BmGame\CookedPCConsole\afterDecomp.cmd"
-  Delete "$INSTDIR\BmGame\CookedPCConsole\backup.cmd"
-  Delete "$INSTDIR\BmGame\CookedPCConsole\move.cmd"
-  Delete "$INSTDIR\BmGame\CookedPCConsole\del.cmd"
-  Delete "$INSTDIR\BmGame\CookedPCConsole\restoreBackups.cmd"
-
-  SetOutPath "$INSTDIR"
-
-SectionEnd
-;--------------------------------
-
 
 ;Uninstaller Section
 Section "Uninstall"
 
+  Call un.Unins
+
+SectionEnd
+
+!macro Unins UN
+Function ${UN}Unins
+  
 
   SetOutPath "$INSTDIR\BmGame\Localization\INT"
 
@@ -207,4 +210,7 @@ Section "Uninstall"
 
   DeleteRegKey /ifempty HKCU "Software\${MUI_PRODUCT_YAMA}"
 
-SectionEnd
+FunctionEnd
+!macroend
+!insertmacro Unins "" 
+!insertmacro Unins "un."
