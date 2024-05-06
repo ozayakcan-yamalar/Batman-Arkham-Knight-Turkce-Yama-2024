@@ -19,15 +19,18 @@
   !define MUI_PRODUCT_YAMA "${MUI_PRODUCT} Turkce Yama"
   !define MUI_PRODUCT_YAMA_KALDIR "${MUI_PRODUCT_YAMA} Kaldir"
   !define MUI_PRODUCT_YAMA_SHORT "${MUI_PRODUCT_SHORT} Turkce Yama"
+  !define MUI_PRODUCT_DOWNLOAD_URL "https://github.com/ozayakcan/Batman-Arkham-Knight-Turkce-Yama-2024-/releases"
+  !define UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MUI_PRODUCT_YAMA}"
   Name "${MUI_PRODUCT_YAMA}"
   OutFile "${MUI_PRODUCT_YAMA}.exe"
   !define MUI_ICON "icon.ico"
   !define MUI_UNICON "icon.ico"
+  !define PUBLISHER "Ozay Akcan"
   !define PRODUCT_VERSION "1.0.0.0"
   VIProductVersion "${PRODUCT_VERSION}"
   VIFileVersion "${PRODUCT_VERSION}"
   VIAddVersionKey "FileVersion" "${VERSION}"
-  VIAddVersionKey "LegalCopyright" "(C) Ozay Akcan."
+  VIAddVersionKey "LegalCopyright" "(C) ${PUBLISHER}."
   VIAddVersionKey "FileDescription" "${MUI_PRODUCT} son surumu icin turkce yama kurar"
   Unicode True
 
@@ -131,8 +134,24 @@ Section "${MUI_PRODUCT_YAMA_SHORT}" SecIns
 
     SetOutPath "$INSTDIR"
 
-    ;Store installation folder
+    ;Register regedit
     WriteRegStr HKCU "Software\${MUI_PRODUCT_YAMA}" "" $INSTDIR
+
+    WriteRegStr SHCTX "${UNINST_KEY}" "DisplayIcon" "$INSTDIR\${MUI_PRODUCT_YAMA_KALDIR}.exe, 0"
+    WriteRegStr SHCTX "${UNINST_KEY}" "DisplayName" "${MUI_PRODUCT_YAMA}"
+    WriteRegStr SHCTX "${UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
+    WriteRegStr SHCTX "${UNINST_KEY}" "UninstallString" \
+      "$\"$INSTDIR\${MUI_PRODUCT_YAMA_KALDIR}.exe$\""
+    WriteRegStr SHCTX "${UNINST_KEY}" "QuietUninstallString" \
+      "$\"$INSTDIR\${MUI_PRODUCT_YAMA_KALDIR}.exe$\" /S"
+    WriteRegStr SHCTX "${UNINST_KEY}" "Publisher" \
+      "${PUBLISHER}"
+    WriteRegStr SHCTX "${UNINST_KEY}" "URLInfoAbout" \
+      "${MUI_PRODUCT_DOWNLOAD_URL}"
+    
+    SectionGetSize ${SecIns} $0
+    WriteRegDWORD SHCTX "${UNINST_KEY}" "EstimatedSize" "$0"
+
 
     ;Create uninstaller
     WriteUninstaller "$INSTDIR\${MUI_PRODUCT_YAMA_KALDIR}.exe"
@@ -186,8 +205,6 @@ Function ${UN}Unins
   File /r "UnistallFiles\restoreBackups.cmd"
 
   nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\restoreBackups.cmd"
-
-  Delete "$INSTDIR\${MUI_PRODUCT_YAMA_KALDIR}.exe"
   
   RMDir "$INSTDIR\BmGame\CookedPCConsole\Temporary"
 
@@ -209,6 +226,10 @@ Function ${UN}Unins
   Delete "$INSTDIR\BmGame\Movies\intro_part_2.txt"
 
   DeleteRegKey /ifempty HKCU "Software\${MUI_PRODUCT_YAMA}"
+
+  DeleteRegKey SHCTX "${UNINST_KEY}"
+
+  Delete "$INSTDIR\${MUI_PRODUCT_YAMA_KALDIR}.exe"
 
 FunctionEnd
 !macroend
