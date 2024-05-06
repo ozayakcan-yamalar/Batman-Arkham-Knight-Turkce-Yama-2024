@@ -92,6 +92,11 @@ Section "${MUI_PRODUCT_YAMA_SHORT}" SecIns
 
 SectionEnd
 
+
+Function .onInit
+  SectionSetFlags ${SecIns} 17
+FunctionEnd
+
 ;--------------------------------
 ;Descriptions
 
