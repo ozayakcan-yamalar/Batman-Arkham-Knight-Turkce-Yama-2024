@@ -14,8 +14,13 @@
 ;General
 
   ;Name and file
-  Name "Batman Arkham City Turkce Yama"
-  OutFile "Batman Arkham City Turkce Yama.exe"
+  !define MUI_PRODUCT "Batman Arkham Knight"
+  !define MUI_PRODUCT_SHORT "Batman AK"
+  !define MUI_PRODUCT_YAMA "${MUI_PRODUCT} Turkce Yama"
+  !define MUI_PRODUCT_YAMA_KALDIR "${MUI_PRODUCT_YAMA} Kaldir"
+  !define MUI_PRODUCT_YAMA_SHORT "${MUI_PRODUCT_SHORT} Turkce Yama"
+  Name "${MUI_PRODUCT_YAMA}"
+  OutFile "${MUI_PRODUCT_YAMA}.exe"
   !define MUI_ICON "icon.ico"
   !define MUI_UNICON "icon.ico"
   !define PRODUCT_VERSION "1.0.0.0"
@@ -23,14 +28,14 @@
   VIFileVersion "${PRODUCT_VERSION}"
   VIAddVersionKey "FileVersion" "${VERSION}"
   VIAddVersionKey "LegalCopyright" "(C) Ozay Akcan."
-  VIAddVersionKey "FileDescription" "Batman Arkham Knight son surumu icin turkce yama kurar"
+  VIAddVersionKey "FileDescription" "${MUI_PRODUCT} son surumu icin turkce yama kurar"
   Unicode True
 
   ;Default installation folder
   InstallDir "C:\"
   
   ;Get installation folder from registry if available
-  InstallDirRegKey HKCU "Software\Batman Arkham Knight Turkce Yama" ""
+  InstallDirRegKey HKCU "Software\${MUI_PRODUCT_YAMA}" ""
 
   ;Request application privileges for Windows Vista
   RequestExecutionLevel user
@@ -56,11 +61,10 @@
 ;Languages
  
   !insertmacro MUI_LANGUAGE "Turkish"
-
 ;--------------------------------
 ;Installer Sections
 
-Section "Batman AK Turkce Yama" SecBatmanAK
+Section "${MUI_PRODUCT_YAMA_SHORT}" SecIns
 
 
   ;Install Localizations
@@ -81,10 +85,10 @@ Section "Batman AK Turkce Yama" SecBatmanAK
   File /r "InstallFiles\CookedPCConsole\*"
 
   ;Store installation folder
-  WriteRegStr HKCU "Software\Batman Arkham Knight Turkce Yama" "" $INSTDIR
+  WriteRegStr HKCU "Software\${MUI_PRODUCT_YAMA}" "" $INSTDIR
 
   ;Create uninstaller
-  WriteUninstaller "$INSTDIR\Batman Arkham Knight Turkce Yama Kaldir.exe"
+  WriteUninstaller "$INSTDIR\${MUI_PRODUCT_YAMA_KALDIR}.exe"
 
 SectionEnd
 
@@ -92,11 +96,11 @@ SectionEnd
 ;Descriptions
 
   ;Language strings
-  LangString DESC_SecBatmanAK ${LANG_TURKISH} "Batman Arkham Knight son surumu icin turkce yama kurar."
+  LangString DESC_SecIns ${LANG_TURKISH} "${MUI_PRODUCT} son surumu icin turkce yama kurar."
 
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecBatmanAK} $(DESC_SecBatmanAK)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecIns} $(DESC_SecIns)
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
@@ -175,7 +179,7 @@ Section "Uninstall"
 
   nsExec::ExecToLog "$INSTDIR\BmGame\CookedPCConsole\restoreBackups.cmd"
 
-  Delete "$INSTDIR\Batman Arkham Knight Turkce Yama Kaldir.exe"
+  Delete "$INSTDIR\${MUI_PRODUCT_YAMA_KALDIR}.exe"
   
   RMDir "$INSTDIR\BmGame\CookedPCConsole\Temporary"
 
@@ -196,6 +200,6 @@ Section "Uninstall"
   Delete "$INSTDIR\BmGame\Movies\intro.txt"
   Delete "$INSTDIR\BmGame\Movies\intro_part_2.txt"
 
-  DeleteRegKey /ifempty HKCU "Software\Batman Arkham Knight Turkce Yama"
+  DeleteRegKey /ifempty HKCU "Software\${MUI_PRODUCT_YAMA}"
 
 SectionEnd
